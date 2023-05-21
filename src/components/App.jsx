@@ -23,48 +23,52 @@ class App extends Component {
     });
   };
 
+  requestToApiAnd = prevState => {
+    const { searchingValue, page } = this.state;
+    try {
+      console.log(page);
+      this.setState({
+        loader: true,
+      });
+
+      findPhotoApi(searchingValue, page)
+        .then(data => {
+          const newData = [];
+
+          data.hits.forEach(obj => {
+            const { id, webformatURL, largeImageURL } = obj;
+
+            newData.push({ id, webformatURL, largeImageURL });
+
+            if (prevState.searchingValue === searchingValue) {
+              return this.setState({
+                photoData: [...prevState.photoData, ...newData],
+              });
+            }
+
+            this.setState({
+              photoData: [...newData],
+            });
+          });
+        })
+        .catch(error => console.log(error))
+        .finally(() => {
+          this.setState({
+            loader: false,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const { searchingValue, page } = this.state;
 
-    if (
-      prevState.searchingValue !== searchingValue ||
-      prevState.page !== page
-    ) {
-      try {
-        console.log(page);
-        this.setState({
-          loader: true,
-        });
-
-        findPhotoApi(searchingValue, page)
-          .then(data => {
-            const newData = [];
-
-            data.hits.forEach(obj => {
-              const { id, webformatURL, largeImageURL } = obj;
-
-              newData.push({ id, webformatURL, largeImageURL });
-
-              if (prevState.searchingValue === searchingValue) {
-                return this.setState({
-                  photoData: [...prevState.photoData, ...newData],
-                });
-              }
-
-              this.setState({
-                photoData: [...newData],
-              });
-            });
-          })
-          .catch(error => console.log(error))
-          .finally(() => {
-            this.setState({
-              loader: false,
-            });
-          });
-      } catch (error) {
-        console.log(error);
-      }
+    if (prevState.searchingValue !== searchingValue) {
+      return this.requestToApiAnd(prevState);
+    } else if (prevState.page !== page) {
+      return this.requestToApiAnd(prevState);
     }
     this.scrollSmooth();
   }
@@ -107,3 +111,39 @@ class App extends Component {
 }
 
 export default App;
+
+// try {
+//   console.log(page);
+//   this.setState({
+//     loader: true,
+//   });
+
+//   findPhotoApi(searchingValue, page)
+//     .then(data => {
+//       const newData = [];
+
+//       data.hits.forEach(obj => {
+//         const { id, webformatURL, largeImageURL } = obj;
+
+//         newData.push({ id, webformatURL, largeImageURL });
+
+//         if (prevState.searchingValue === searchingValue) {
+//           return this.setState({
+//             photoData: [...prevState.photoData, ...newData],
+//           });
+//         }
+
+//         this.setState({
+//           photoData: [...newData],
+//         });
+//       });
+//     })
+//     .catch(error => console.log(error))
+//     .finally(() => {
+//       this.setState({
+//         loader: false,
+//       });
+//     });
+// } catch (error) {
+//   console.log(error);
+// }
