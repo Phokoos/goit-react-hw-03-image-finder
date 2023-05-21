@@ -26,7 +26,6 @@ class App extends Component {
   requestToApiAnd = prevState => {
     const { searchingValue, page } = this.state;
     try {
-      console.log(page);
       this.setState({
         loader: true,
       });
@@ -82,6 +81,7 @@ class App extends Component {
       return alert('Please write another name');
     }
     this.setState({
+      page: 1,
       searchingValue: value,
       photoData: [],
     });
