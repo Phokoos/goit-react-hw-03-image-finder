@@ -91,8 +91,8 @@ class App extends Component {
 
   clickLoadMore = () => {
     console.log('click loadmore');
-    this.setState(prev => ({
-      page: (prev.page += 1),
+    this.setState(({ page }) => ({
+      page: (page += 1),
     }));
   };
 
