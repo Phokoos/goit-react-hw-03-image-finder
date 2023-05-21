@@ -31,6 +31,7 @@ class App extends Component {
       prevState.page !== page
     ) {
       try {
+        console.log(page);
         this.setState({
           loader: true,
         });
