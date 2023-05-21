@@ -7,12 +7,14 @@ import css from './App.module.css';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
+import Loader from './Loader/Loader';
 
 class App extends Component {
   state = {
     searchingValue: '',
     page: 1,
     photoData: [],
+    loader: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -23,16 +25,31 @@ class App extends Component {
       prevState.page !== page
     ) {
       try {
-        findPhotoApi(searchingValue, page).then(data => {
-          const newData = [];
-          data.hits.forEach(obj => {
-            const { id, webformatURL, largeImageURL } = obj;
-            newData.push({ id, webformatURL, largeImageURL });
+        this.setState({
+          loader: true,
+        });
+        findPhotoApi(searchingValue, page)
+          .then(data => {
+            const newData = [];
+            data.hits.forEach(obj => {
+              const { id, webformatURL, largeImageURL } = obj;
+              newData.push({ id, webformatURL, largeImageURL });
+              if (prevState.searchingValue === searchingValue) {
+                return this.setState({
+                  photoData: [...prevState.photoData, ...newData],
+                });
+              }
+              this.setState({
+                photoData: [...newData],
+              });
+            });
+          })
+          .catch(error => console.log(error))
+          .finally(() => {
             this.setState({
-              photoData: [...prevState.photoData, ...newData],
+              loader: false,
             });
           });
-        });
       } catch (error) {
         console.log(error);
       }
@@ -41,8 +58,15 @@ class App extends Component {
 
   clickSearch = event => {
     event.preventDefault();
+
+    const { value } = event.target.input;
+
+    if (value === this.state.searchingValue) {
+      return alert('Please write another name');
+    }
     this.setState({
-      searchingValue: event.target.input.value,
+      searchingValue: value,
+      photoData: [],
     });
   };
 
@@ -53,17 +77,17 @@ class App extends Component {
   };
 
   render() {
-    const { photoData } = this.state;
+    const { photoData, loader } = this.state;
     return (
       <div className={css.app}>
         <Searchbar onSubmit={this.clickSearch} />
         <ImageGallery cards={photoData} />
-        {/* <Loader /> */}
-        {photoData.length !== 0 && (
+
+        {photoData.length !== 0 && loader !== true && (
           <Button loadMoreBtnClick={this.clickLoadMore} />
         )}
 
-        {/* <Modal /> */}
+        {loader && <Loader />}
       </div>
     );
   }

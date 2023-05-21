@@ -1,11 +1,12 @@
 import css from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = ({ card }) => {
+const ImageGalleryItem = ({ card, openModal }) => {
   return (
     <li key={card.id} className={css.ImageGalleryItem}>
       <img
+        onClick={openModal}
         src={card.webformatURL}
-        alt=""
+        alt={card.largeImageURL}
         className={css.ImageGalleryItemImage}
       />
     </li>
