@@ -1,5 +1,4 @@
 import { Component } from 'react';
-
 import { findPhotoApi } from 'api/api';
 
 import css from './App.module.css';
@@ -18,10 +17,8 @@ class App extends Component {
   };
 
   scrollSmooth = () => {
-    const windowHeight = window.innerHeight;
-
     window.scrollBy({
-      top: windowHeight,
+      top: window.innerHeight,
       behavior: 'smooth',
     });
   };
@@ -37,17 +34,22 @@ class App extends Component {
         this.setState({
           loader: true,
         });
+
         findPhotoApi(searchingValue, page)
           .then(data => {
             const newData = [];
+
             data.hits.forEach(obj => {
               const { id, webformatURL, largeImageURL } = obj;
+
               newData.push({ id, webformatURL, largeImageURL });
+
               if (prevState.searchingValue === searchingValue) {
                 return this.setState({
                   photoData: [...prevState.photoData, ...newData],
                 });
               }
+
               this.setState({
                 photoData: [...newData],
               });

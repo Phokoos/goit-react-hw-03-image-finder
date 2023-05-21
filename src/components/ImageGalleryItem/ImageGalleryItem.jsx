@@ -1,5 +1,7 @@
 import css from './ImageGalleryItem.module.css';
 
+import PropTypes from 'prop-types';
+
 const ImageGalleryItem = ({ card, openModal }) => {
   return (
     <li key={card.id} className={css.ImageGalleryItem}>
@@ -11,6 +13,11 @@ const ImageGalleryItem = ({ card, openModal }) => {
       />
     </li>
   );
+};
+
+ImageGalleryItem.prototype = {
+  card: PropTypes.object,
+  openModal: PropTypes.func,
 };
 
 export default ImageGalleryItem;

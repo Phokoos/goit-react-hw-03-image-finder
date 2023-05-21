@@ -12,15 +12,11 @@ class Modal extends Component {
   }
 
   handleKeyDown = event => {
-    if (event.code === 'Escape') {
-      this.props.closeModal();
-    }
+    if (event.code === 'Escape') this.props.closeModal();
   };
 
   clickBackdrop = event => {
-    if (event.target === event.currentTarget) {
-      this.props.closeModal();
-    }
+    if (event.target === event.currentTarget) this.props.closeModal();
   };
 
   render() {
@@ -28,7 +24,7 @@ class Modal extends Component {
     return (
       <div className={css.overlay} onClick={this.clickBackdrop}>
         <div className={css.modal}>
-          <img src={url} alt="" />
+          <img src={url} alt={url} />
         </div>
       </div>
     );

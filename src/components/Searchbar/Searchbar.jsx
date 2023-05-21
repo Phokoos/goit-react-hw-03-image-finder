@@ -1,5 +1,7 @@
 import css from './Searchbar.module.css';
 
+import PropTypes from 'prop-types';
+
 const Searchbar = ({ onSubmit }) => {
   return (
     <header className={css.searchbar}>
@@ -12,13 +14,15 @@ const Searchbar = ({ onSubmit }) => {
           className={css.input}
           type="text"
           name="input"
-          // autocomplete="off"
-          // autofocus
           placeholder="Search images and photos"
         />
       </form>
     </header>
   );
+};
+
+Searchbar.prototype = {
+  onSubmit: PropTypes.func,
 };
 
 export default Searchbar;
