@@ -64,12 +64,11 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { searchingValue, page } = this.state;
 
-    if (prevState.searchingValue !== searchingValue) {
-      console.log('change value');
-      return this.requestToApiAnd(prevState);
-    } else if (prevState.page !== page) {
-      console.log('change page');
-      return this.requestToApiAnd(prevState);
+    if (
+      prevState.searchingValue !== searchingValue ||
+      prevState.page !== page
+    ) {
+      this.requestToApiAnd(prevState);
     }
     this.scrollSmooth();
   }
@@ -90,7 +89,6 @@ class App extends Component {
   };
 
   clickLoadMore = () => {
-    console.log('click loadmore');
     this.setState(({ page }) => ({
       page: (page += 1),
     }));
@@ -114,39 +112,3 @@ class App extends Component {
 }
 
 export default App;
-
-// try {
-//   console.log(page);
-//   this.setState({
-//     loader: true,
-//   });
-
-//   findPhotoApi(searchingValue, page)
-//     .then(data => {
-//       const newData = [];
-
-//       data.hits.forEach(obj => {
-//         const { id, webformatURL, largeImageURL } = obj;
-
-//         newData.push({ id, webformatURL, largeImageURL });
-
-//         if (prevState.searchingValue === searchingValue) {
-//           return this.setState({
-//             photoData: [...prevState.photoData, ...newData],
-//           });
-//         }
-
-//         this.setState({
-//           photoData: [...newData],
-//         });
-//       });
-//     })
-//     .catch(error => console.log(error))
-//     .finally(() => {
-//       this.setState({
-//         loader: false,
-//       });
-//     });
-// } catch (error) {
-//   console.log(error);
-// }
