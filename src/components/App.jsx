@@ -17,6 +17,15 @@ class App extends Component {
     loader: false,
   };
 
+  scrollSmooth = () => {
+    const windowHeight = window.innerHeight;
+
+    window.scrollBy({
+      top: windowHeight,
+      behavior: 'smooth',
+    });
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const { searchingValue, page } = this.state;
 
@@ -54,6 +63,7 @@ class App extends Component {
         console.log(error);
       }
     }
+    this.scrollSmooth();
   }
 
   clickSearch = event => {
