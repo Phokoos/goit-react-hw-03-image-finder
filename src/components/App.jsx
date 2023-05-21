@@ -65,8 +65,10 @@ class App extends Component {
     const { searchingValue, page } = this.state;
 
     if (prevState.searchingValue !== searchingValue) {
+      console.log('change value');
       return this.requestToApiAnd(prevState);
     } else if (prevState.page !== page) {
+      console.log('change page');
       return this.requestToApiAnd(prevState);
     }
     this.scrollSmooth();
