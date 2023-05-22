@@ -14,6 +14,7 @@ class App extends Component {
     page: 1,
     photoData: [],
     loader: false,
+    showBtn: true,
   };
 
   scrollSmooth = () => {
@@ -32,6 +33,13 @@ class App extends Component {
 
       findPhotoApi(searchingValue, page)
         .then(data => {
+          if (data.total <= 12 * page) {
+            this.setState({
+              showBtn: false,
+            });
+            alert('You see all pictures now');
+          }
+
           const newData = [];
 
           data.hits.forEach(obj => {
@@ -85,23 +93,24 @@ class App extends Component {
       page: 1,
       searchingValue: value,
       photoData: [],
+      showBtn: true,
     });
   };
 
   clickLoadMore = () => {
     this.setState(({ page }) => ({
-      page: (page += 1),
+      page: page + 1,
     }));
   };
 
   render() {
-    const { photoData, loader } = this.state;
+    const { photoData, loader, showBtn } = this.state;
     return (
       <div className={css.app}>
         <Searchbar onSubmit={this.clickSearch} />
         <ImageGallery cards={photoData} />
 
-        {photoData.length !== 0 && loader !== true && (
+        {photoData.length !== 0 && showBtn && loader !== true && (
           <Button loadMoreBtnClick={this.clickLoadMore} />
         )}
 
